@@ -162,10 +162,23 @@
   const playButton = document.getElementById("play-button");
   const audioPlayer = document.getElementById("audio-player");
   const playButtonContainer = document.querySelector(".play-button-container");
+  let audioPaused = false; // Variável para controlar se o áudio está pausado
 
   playButton.addEventListener("click", () => {
     playButtonContainer.style.display = "none";
     audioPlayer.play();
+  });
+
+  // Ouvinte para pausar o áudio quando a página não estiver mais visível
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      audioPaused = !audioPlayer.paused; // Armazena o status de pausa do áudio
+      if (!audioPlayer.paused) {
+        audioPlayer.pause();
+      }
+    } else if (document.visibilityState === "visible" && audioPaused) {
+      audioPlayer.play();
+    }
   });
 
     // Bloquear o acesso ao console
